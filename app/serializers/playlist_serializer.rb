@@ -1,4 +1,6 @@
 class PlaylistSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :name, :image_url
+  attributes :name, :image_url, :slug
+
+  has_many :songs
 end
