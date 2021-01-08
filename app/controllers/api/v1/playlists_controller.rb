@@ -4,13 +4,13 @@ module Api
             def index
                 playlists = Playlist.all
 
-                render json: PlaylistSerializer.new(playlists).serialized_json
+                render json: PlaylistSerializer.new(playlists, options).serialized_json
             end
 
             def show
                 playlist = Playlist.find_by(slug: params[:slug])
 
-                render json: PlaylistSerializer.new(playlist).serialized_json
+                render json: PlaylistSerializer.new(playlist, options).serialized_json
             end
 
             def create
@@ -27,7 +27,7 @@ module Api
                 playlist = Playlist.find_by(slug: params[:slug])
 
                 if playlist.update(playlist_params)
-                    render json: PlaylistSerializer.new(playlist).serialized_json
+                    render json: PlaylistSerializer.new(playlist, options).serialized_json
                 else
                     render json: {error: playlist.errors.messages}, status: 422
                 end
@@ -48,6 +48,11 @@ module Api
             def playlist_params
                 params.require(:playlist).permit(:name, :image_url)
             end
+
+            def options
+                @options ||= { include: %i[songs] }
+            end
+
         end
     end
 end
